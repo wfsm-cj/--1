@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+<head>
+<!-- //单纯的注释 -->
+    <meta charset="utf-8">
+    <title></title>
+    <style type="text/css">
+        html,body{margin:0px;padding:0px;width: 100%;height:100%;font-family: "微软雅黑";font-size: 62.5%;background: #ccc;}
+        .boxDom {
+            width:100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .idDom {
+            width: 100%;
+            height: 60px;
+            background: #666;
+            position: fixed;
+            bottom: 0px;
+        }
+        .content {
+            display: inline-block;
+            width:430px;
+            height: 40px;
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            top:0px;
+            bottom:0px;
+            margin:auto;
+        }
+        .title {
+            display: inline;
+            font-size: 4em;
+            vertical-align:bottom;
+            color:#fff;
+        }
+        .text {
+            border:none;
+            width:300px;
+            height: 30px;
+            border-radius: 5px;
+            font-size: 2.4em;
+        }
+        .btn {
+            width:60px;
+            height: 30px;
+            background: #f90000;
+            border:none;
+            color:#fff;
+            font-size: 2.4em;
+        }
+        span {
+            width:300px;
+            height: 40px;
+            position: absolute;
+            overflow: hidden;
+            color:#000;
+            font-size: 4em;
+            line-height: 1.5em;
+            cursor: pointer;
+            white-space:nowrap;
+        }
+    </style>
+</head>
+
+<body>
+<div class="boxDom" id="boxDom">
+    <div class="idDom" id="idDom">
+        <div class="content">
+            <p class="title">吐槽:</p>
+            <input type="text" class="text" id="text" />
+            <button type="button" class="btn" id="btn">发射</button>
+        </div>
+    </div>
+</div>
+</body>
+
+
+<script src="common.js"></script>
+<script src="animate.js"></script>
+<script>
+
+    var colorArr=["cyan","red","white","black","green","blue","yellow","hotpink"];
+    //1. 找对象
+    var btn = document.getElementById("btn");
+    var text = document.getElementById("text");
+    var boxDom = document.getElementById("boxDom");
+
+    //2. 给按钮注册点击事件
+    btn.onclick = function () {
+        //3. 获取到文本框的值，动态的生成span，添加boxDom里面去
+        var content = text.value;
+        var span = document.createElement("span");
+        span.innerHTML = content;
+        boxDom.appendChild(span);
+
+        //3.1 颜色随机
+        var random = parseInt(Math.random() * colorArr.length);
+        span.style.color = colorArr[random];
+
+        //3.2 设置span的初始位置
+        var pageWidth = getClient().width;
+        span.style.left = pageWidth + "px";
+        span.style.top = parseInt(Math.random() * 300) + "px";
+
+        //3.3 让span渐渐的跑到最左边，当span到达终点的时候，删除这个span
+        animate(span, -500, function () {
+            //到达终点
+            boxDom.removeChild(span);
+        });
+
+        text.value = "";
+    }
+
+
+    document.onkeydown = function (event) {
+        event = event || window.event;
+        //console.log(event.keyCode);
+        if(event.keyCode === 13){
+            btn.click();
+        }
+    }
+
+
+</script>
+</html>
